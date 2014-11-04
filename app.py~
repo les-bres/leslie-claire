@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from utils import add_user, emailconfirmation
+from utils import 
 
 app = Flask(__name__)
 
@@ -23,7 +23,7 @@ def register():
         email = request.form["email"]
         if (emailconfirmation(email) == True):
             add_user(username,password,name,email)
-            return redirect(url_for("register"))
+            return redirect(url_for("register")
         else:
             return render_template("register.html", message = "invalid email, please try again.")
 
