@@ -10,6 +10,10 @@ def home():
 def about():
     return render_template("about.html")
 
+@app.route("/register")
+def register():
+    return render_template("register.html")
+
 if __name__=="__main__":
     app.debug = True
     app.run()
