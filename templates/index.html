@@ -24,12 +24,16 @@
     <fieldset>
     <div class="pure-control-group">
       <label for="name">Username</label>
-      <input id="name" type="text" placeholder="Username" name="user">
+      <input id="name" type="text" placeholder="Username" name="name">
     </div>
     <div class="pure-control-group">
       <label for="password">Password</label>
       <input id="password" type="password" placeholder="Password" name="password">
     </div>
+    {%if msg != None%}
+    <br> {{msg}} <br>
+    {%endif%}
+    
     
     <div class="pure-controls">
     <button type="submit" name="b" value="Login" class="pure-button pure-button-primary">Login</button>
