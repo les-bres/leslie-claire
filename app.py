@@ -34,12 +34,15 @@ def authenticate( username, passw ):
 
 @app.route("/", methods=["GET","POST"])
 def home():
-    if request.method=="GET":
-        return render_template("index.html", msg=None)
+    if 'username' in session:
+        return redirect(url_for('profile'))
     else:
-        username = request.form["name"]
-        password = request.form["password"]
-        
+        if request.method=="GET":
+            return render_template("index.html", msg=None)
+        else:
+            username = request.form["name"]
+            password = request.form["password"]
+            
         msg = authenticate( username, password )
         
         if (msg == "match"):
@@ -50,7 +53,11 @@ def home():
 
 @app.route("/about")
 def about():
-    return render_template("about.html")
+    if 'username' in session:
+        boo = True
+    else:
+        boo = False
+    return render_template("about.html", boo=boo)
 
 #register page
 @app.route("/register", methods=["GET", "POST"])
@@ -83,7 +90,20 @@ def profile():
         description = user['description']
         status = user['status']
         return render_template("profile.html", username=username, name=name, email=email, description=description, status = status)
-        
+    else:
+        return redirect(url_for('home'))
+
+@app.route("/log_out")
+def log_out():
+    session.pop('username',None)
+    return redirect(url_for('home'))
+
+@app.route("/explore", methods=["GET","POST"])
+def explore():
+    if 'username' in session:
+        return "other ppl's statuses"
+    else:
+        return redirect(url_for('home'))
 
 
 if __name__=="__main__":
