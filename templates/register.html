@@ -20,21 +20,21 @@
     <div class="pure-u-1-5"></div>
     <div class="pure-u-3-5">
 
-<form class="pure-form" align="center">
-    <fieldset class="pure-group" align="center">
+<form class="pure-form" method="POST">
+    <fieldset class="pure-group">
         <input id="username" name="username" type="text" class="pure-input-1-2" placeholder="Username">
         <input id="password" name="password" type="text" class="pure-input-1-2" placeholder="Password">
-	<input id="name" name="name" type="text" class="pure-input-1-2" placeholder="Password">
+	<input id="name" name="name" type="text" class="pure-input-1-2" placeholder="Name">
         <input id="email" name="email" type="email" class="pure-input-1-2" placeholder="Email">
-    </fieldset>
-
-      <div class="pure-controls">
-            <label for="cb" class="pure-checkbox">
-                <input id="cb" type="checkbox"> I've read the terms and conditions
-		{{message}}
-            </label>
-
+	
+		{%if msg != None %}
+		<br> {{msg}} <br>
+		{%endif%}
+    
     <button type="submit" class="pure-button pure-input-1-2 pure-button-primary">Register</button>
+</fieldset>
+
+
 </form>
 
 </div>
