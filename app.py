@@ -3,6 +3,7 @@ from flask import Flask, flash, render_template, request, redirect, url_for, ses
 from pymongo import MongoClient
 
 app = Flask(__name__)
+app.secret_key = 'secret'
 
 client = MongoClient('localhost', 27017)
 db = client.proj
@@ -14,7 +15,9 @@ def add_user(username,password,name,email):
         'username' : username,
         'password' : password,
         'email' : email,
-        'name' : name
+        'name' : name,
+        'status' : None,
+        'description' : None
     }
     return users.insert(user)
 
@@ -31,28 +34,35 @@ def authenticate( username, passw ):
 
 @app.route("/", methods=["GET","POST"])
 def home():
-    if request.method=="GET":
-        return render_template("index.html", msg=None)
+    if 'username' in session:
+        return redirect(url_for('profile'))
     else:
-        username = request.form["name"]
-        password = request.form["password"]
-        
+        if request.method=="GET":
+            return render_template("index.html", msg=None)
+        else:
+            username = request.form["name"]
+            password = request.form["password"]
+            
         msg = authenticate( username, password )
         
         if (msg == "match"):
+            session['username'] = username
             return redirect(url_for('profile'))
         else:
             return render_template("index.html", msg=msg)
 
 @app.route("/about")
 def about():
-    return render_template("about.html")
+    if 'username' in session:
+        boo = True
+    else:
+        boo = False
+    return render_template("about.html", boo=boo)
 
 #register page
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method=="GET":
-        print "dog"
         return render_template("register.html", msg = None)
        
     else:
@@ -62,18 +72,38 @@ def register():
         name = request.form["name"]
 
         msg = confirmation(username, password,email,name)
-        print msg
-        print "cat"
         if (msg == "good"):
-            add_user(username,password,email)
-            return render_template("index.html", msg="registration successful, please log in")
+            add_user(username,password,email,name)
+            session['username'] = username
+            return redirect(url_for('profile'))
         else:
             return render_template("register.html", msg=msg)
 
 
-@app.route("/profile")
+@app.route("/profile", methods=["GET","POST"])
 def profile():
-    return "you logged in"
+    if 'username' in session:
+        username = escape(session['username'])
+        user = users.find_one({'username':username})
+        name = user['name']
+        email = user['email']
+        description = user['description']
+        status = user['status']
+        return render_template("profile.html", username=username, name=name, email=email, description=description, status = status)
+    else:
+        return redirect(url_for('home'))
+
+@app.route("/log_out")
+def log_out():
+    session.pop('username',None)
+    return redirect(url_for('home'))
+
+@app.route("/explore", methods=["GET","POST"])
+def explore():
+    if 'username' in session:
+        return "other ppl's statuses"
+    else:
+        return redirect(url_for('home'))
 
 
 if __name__=="__main__":

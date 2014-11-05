@@ -1,0 +1,42 @@
+<!doctype html>
+<head>
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css">
+</head>
+
+<div class="pure-menu pure-menu-open pure-menu-horizontal">
+    <a href="/" class="pure-menu-heading">Blog</a>
+
+    <ul>
+        <li class="pure-menu-selected"><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+	<li><a href="/explore">Explore</a></li>
+	<li><a href="/log_out">Log Out</a></li>
+
+	
+    </ul>
+</div>
+<hr>
+<br>
+<div class="pure-g">
+    <div class="pure-u-1-5"></div>
+    <div class="pure-u-3-5">
+      username: {{username}} <br>
+      name: {{name}} <br>
+      email: {{email}} <br> <hr> <hr>
+      description: 
+      {%if description == None %}
+      Add a description to your profile!
+      {%else%}
+      {{description}}
+      {%endif%}
+      <br><hr><br>
+      {%if status == None %}
+      Update your status!
+      {%else%}
+      {{status}}
+      {%endif%}
+      </div>
+
+<div class="pure-u-1-5"></div>
+	 
