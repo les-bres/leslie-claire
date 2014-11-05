@@ -1,6 +1,7 @@
 from utils import confirmation
 from flask import Flask, flash, render_template, request, redirect, url_for, session, escape
 from pymongo import MongoClient
+import datetime
 
 app = Flask(__name__)
 app.secret_key = 'secret'
@@ -53,11 +54,13 @@ def home():
 
 @app.route("/about")
 def about():
+    username = None
     if 'username' in session:
         boo = True
+        username = escape(session['username'])
     else:
         boo = False
-    return render_template("about.html", boo=boo)
+    return render_template("about.html", boo=boo, user=username)
 
 #register page
 @app.route("/register", methods=["GET", "POST"])
@@ -73,6 +76,11 @@ def register():
 
         msg = confirmation(username, password,email,name)
         if (msg == "good"):
+            if users.find_one({'username': username}) != None:
+                return render_template( "register.html", msg="username already exists")
+            if users.find_one({'email': email}) != None:
+                return render_template( "register.html", msg="email already registered to another account" )
+
             add_user(username,password,email,name)
             session['username'] = username
             return redirect(url_for('profile'))
@@ -118,7 +126,13 @@ def log_out():
 @app.route("/explore", methods=["GET","POST"])
 def explore():
     if 'username' in session:
-        return "other ppl's statuses"
+        username = escape(session['username'])
+        today = datetime.date.today()
+        today = today.strftime('%A,%B%dth, %Y')
+        time = datetime.datetime.now().time()
+        time = time.strftime("%I:%M")
+   
+        return render_template("explore.html", today=today, time=time, username=username)
     else:
         return redirect(url_for('home'))
 

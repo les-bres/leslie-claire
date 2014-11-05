@@ -9,11 +9,11 @@
 
     <ul>
         <li class="pure-menu-selected"><a href="/">Home</a></li>
-        <li><a href="about">About</a></li>
-	{%if boo == True %}
-	<li><a href="explore">Explore</a></li>
-	<li><a href="log_out">Log Out</a></li>
-	{%endif%}
+        <li><a href="/about">About</a></li>
+	<li><a href="/explore">Explore</a></li>
+	<li><a href="/log_out">Log Out</a></li>
+
+	
     </ul>
 </div>
 <hr>
@@ -21,18 +21,25 @@
 <div class="pure-g">
     <div class="pure-u-1-5">
 <font face="Verdana" align="right" color="blue"> 
-      {%if user != None%}
-     &nbsp;&nbsp;&nbsp;{{user}}
-      {%endif%}
-</font>
-    </div>
-    <div class="pure-u-3-5">
-      <font align="center">
-    Welcome to Claire & Leslie's Project.  Make an account, set up a profile, and have a party!
-    </font>
-    </div>
-    <div class="pure-u-1-5">
     
-   
+     &nbsp;&nbsp;&nbsp;{{username}}
+     
+</font>
 </div>
-</div>
+    <div class="pure-u-3-5">
+      <font face="Verdana" align="center">
+	
+      <h1> Current Time </h1>
+      <p>
+      {{today}} <br>
+      {{time}}
+</p>
+
+      <br><br>
+      <h2> And Always Remember... </h2>
+      <p>
+      <img src="/static/dog.jpg" alt="doggie" align="center">
+</p>
+      </font>
+
+
