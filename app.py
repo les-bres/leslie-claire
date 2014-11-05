@@ -10,7 +10,7 @@ db = client.proj
 users = db.users
 
 
-def add_user(username,password,name,email):
+def add_user(username,password,email,name):
     user = {
         'username' : username,
         'password' : password,
@@ -83,13 +83,30 @@ def register():
 @app.route("/profile", methods=["GET","POST"])
 def profile():
     if 'username' in session:
+
         username = escape(session['username'])
         user = users.find_one({'username':username})
         name = user['name']
         email = user['email']
         description = user['description']
         status = user['status']
-        return render_template("profile.html", username=username, name=name, email=email, description=description, status = status)
+
+        if request.method=="GET":
+            return render_template("profile.html", username=username, name=name, email=email, description=description, status = status)
+                        
+
+        if request.method=="POST":
+            statt = request.form["status"]
+            descrip = request.form["description"]
+            if statt != "":
+                db.users.update({ 'username': username },{'$set': {'status': statt}})
+                status = statt
+            if descrip != "":
+                db.users.update({ 'username': username },{'$set': {'description': descrip}})
+                description = descrip
+ 
+            return render_template("profile.html", username=username, name=name, email=email, description=description, status = status)
+        
     else:
         return redirect(url_for('home'))
 
